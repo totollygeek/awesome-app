@@ -88,7 +88,7 @@ class Build : NukeBuild, IHaveGit
         .Produces(TestResultDirectory / "*.xml")
         .Executes(() =>
         {
-            
+            EnsureExistingDirectory(TestResultDirectory);
         });
 
     Target Pack => _ => _
@@ -96,7 +96,7 @@ class Build : NukeBuild, IHaveGit
         .Produces(PackagesDirectory / "*.nupkg")
         .Executes(() =>
         {
-            
+            EnsureExistingDirectory(PackagesDirectory);
         });
 
     Target PushPackages => _ => _
@@ -104,7 +104,7 @@ class Build : NukeBuild, IHaveGit
         .Requires(() => NuGetApiKey)
         .Executes(() =>
         {
-            
+            Logger.Info($"NuGetApiKey: {NuGetApiKey}");
         });
 
     Target Announce => _ => _
