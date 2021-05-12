@@ -3,8 +3,10 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>awesome_app</RootNamespace>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <RootNamespace>TOTOllyGeek.Awesome</RootNamespace> 
+        
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>awesome</ToolCommandName>
     </PropertyGroup>
 
 </Project>
