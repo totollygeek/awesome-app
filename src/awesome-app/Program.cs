@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace awesome_app
+namespace TOTOllyGeek.Awesome
 {
     class Program
     {

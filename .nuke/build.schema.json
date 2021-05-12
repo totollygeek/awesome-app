@@ -43,6 +43,10 @@
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
         },
+        "NuGetApiKey": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
         "Plan": {
           "type": "boolean",
           "description": "Shows the execution plan (HTML)"
@@ -64,9 +68,13 @@
           "items": {
             "type": "string",
             "enum": [
+              "Announce",
               "Clean",
               "Compile",
-              "Restore"
+              "Pack",
+              "PushPackages",
+              "Restore",
+              "Test"
             ]
           }
         },
@@ -80,9 +88,13 @@
           "items": {
             "type": "string",
             "enum": [
+              "Announce",
               "Clean",
               "Compile",
-              "Restore"
+              "Pack",
+              "PushPackages",
+              "Restore",
+              "Test"
             ]
           }
         },
