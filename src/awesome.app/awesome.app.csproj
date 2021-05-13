@@ -9,4 +9,8 @@
         <ToolCommandName>awesome</ToolCommandName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\awesome.lib\awesome.lib.csproj" />
+    </ItemGroup>
+
 </Project>
