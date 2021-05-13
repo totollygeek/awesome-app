@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome-app", "src\awesome-app\awesome-app.csproj", "{32323913-6995-4632-9D11-BD2E306369AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome.app", "src\awesome.app\awesome.app.csproj", "{32323913-6995-4632-9D11-BD2E306369AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome-lib", "src\awesome-lib\awesome-lib.csproj", "{8D419B5A-C7EF-436F-B6FB-8ADC04DDACD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome.lib", "src\awesome.lib\awesome.lib.csproj", "{8D419B5A-C7EF-436F-B6FB-8ADC04DDACD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome-tests", "tests\awesome-tests\awesome-tests.csproj", "{87C510AF-0D57-4CD7-B5EB-72EA26981612}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "awesome.tests", "tests\awesome.tests\awesome.tests.csproj", "{87C510AF-0D57-4CD7-B5EB-72EA26981612}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1B086AC7-8227-4E6B-8F8D-62DA74B0A799}"
 EndProject
@@ -20,6 +20,7 @@ ProjectSection(SolutionItems) = preProject
 	global.json = global.json
 	NuGet.config = NuGet.config
 	.github\workflows\continuous.yml = .github\workflows\continuous.yml
+	Directory.build.props = Directory.build.props
 EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{8E438553-F16C-4098-AD7A-D093B0DE7A48}"

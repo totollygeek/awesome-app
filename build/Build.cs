@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -6,6 +8,8 @@ using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
@@ -40,7 +44,7 @@ class Build : NukeBuild, IHaveGit
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-
+    
     [Parameter] [Secret] string NuGetApiKey;
 
     [Solution] readonly Solution Solution;
@@ -65,7 +69,7 @@ class Build : NukeBuild, IHaveGit
     Target Restore => _ => _
         .Executes(() =>
         {
-            DotNetRestore(s => s
+            DotNetRestore(_ => _
                 .SetProjectFile(Solution));
         });
 
@@ -73,7 +77,7 @@ class Build : NukeBuild, IHaveGit
         .DependsOn(Restore)
         .Executes(() =>
         {
-            DotNetBuild(s => s
+            DotNetBuild(_ => _
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetAssemblyVersion(GitVersion.AssemblySemVer)
@@ -81,15 +85,66 @@ class Build : NukeBuild, IHaveGit
                 .SetInformationalVersion(GitVersion.InformationalVersion)
                 .EnableNoRestore());
         });
+    
+    [Partition(2)] readonly Partition TestPartition;
+    IEnumerable<Project> TestProjects => TestPartition.GetCurrent(Solution.GetProjects("*.tests"));
 
     Target Test => _ => _
         .DependsOn(Compile)  
         .Produces(TestResultDirectory / "*.trx")
         .Produces(TestResultDirectory / "*.xml")
+        .Produces(TestResultDirectory / "*.html")
         .Executes(() =>
         {
             EnsureExistingDirectory(TestResultDirectory);
+            
+            try
+            {
+                var logger = IsLocalBuild ? "html" : "trx";
+                
+                DotNetTest(_ => _
+                        .SetConfiguration(Configuration)
+                    .SetNoBuild(SucceededTargets.Contains(Compile))
+                    .ResetVerbosity()
+                    .SetResultsDirectory(TestResultDirectory)
+                    .When(IsServerBuild, _ => _
+                        .EnableCollectCoverage()
+                        .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                        .SetExcludeByFile("*.Generated.cs")
+                        .SetCoverletOutputFormat($"\\\"{CoverletOutputFormat.cobertura},{CoverletOutputFormat.json}\\\"")
+                        .EnableUseSourceLink())
+                    .CombineWith(TestProjects, (_, p) => _
+                            .SetProjectFile(p)
+                            .SetLogger($"{logger};LogFileName={p.Name}.{logger}")),
+                    completeOnFailure: true);
+            }
+            finally
+            {
+                ReportTestCount();
+            }
         });
+
+    void ReportTestCount()
+    {
+        IEnumerable<string> GetOutcomes(AbsolutePath file)
+            => XmlTasks.XmlPeek(
+                file,
+                "/xn:TestRun/xn:Results/xn:UnitTestResult/@outcome",
+                ("xn", "http://microsoft.com/schemas/VisualStudio/TeamTest/2010"));
+
+        var resultFiles = TestResultDirectory.GlobFiles("*.trx");
+        var outcomes = resultFiles.SelectMany(GetOutcomes).ToList();
+        var passedTests = outcomes.Count(x => x == "Passed");
+        var failedTests = outcomes.Count(x => x == "Failed");
+        var skippedTests = outcomes.Count(x => x == "NotExecuted");
+
+        ReportSummary(_ => _
+            .When(failedTests > 0, _ => _
+                .AddPair("Failed", failedTests.ToString()))
+            .AddPair("Passed", passedTests.ToString())
+            .When(skippedTests > 0, _ => _
+                .AddPair("Skipped", skippedTests.ToString())));
+    }
 
     Target Pack => _ => _
         .DependsOn(Test)
@@ -97,6 +152,14 @@ class Build : NukeBuild, IHaveGit
         .Executes(() =>
         {
             EnsureExistingDirectory(PackagesDirectory);
+
+            DotNetPack(_ => _
+                .SetProject(Solution)
+                .SetConfiguration(Configuration)
+                .SetNoBuild(SucceededTargets.Contains(Compile))
+                .SetOutputDirectory(PackagesDirectory)
+                .SetRepositoryUrl(GitRepository.HttpsUrl)
+                .SetVersion(GitVersion.NuGetVersionV2));
         });
 
     Target PushPackages => _ => _
@@ -104,13 +167,7 @@ class Build : NukeBuild, IHaveGit
         .Requires(() => NuGetApiKey)
         .Executes(() =>
         {
-            Logger.Info($"NuGetApiKey: {NuGetApiKey}");
-        });
-
-    Target Announce => _ => _
-        .Executes(() =>
-        {
-            
+            Logger.Info("");
         });
 
     T From<T>()
