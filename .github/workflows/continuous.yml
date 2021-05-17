@@ -30,10 +30,10 @@ jobs:
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v2
         with:
-          path: |
+         path: |
             .nuke/temp
             ~/.nuget/packages
-          key: ${{ runner.os }}-${{ hashFiles('global.json', 'source/**/*.csproj') }}
+         key: ${{ runner.os }}-${{ hashFiles('global.json', 'source/**/*.csproj') }}
       - name: Run './build.cmd Test PushPackages'
         run: ./build.cmd Test PushPackages
         env:
@@ -43,7 +43,7 @@ jobs:
           name: test-results
           path: output/test-results
       - uses: actions/upload-artifact@v1
-        with:
+         with:
           name: packages
           path: output/packages
   ubuntu-latest:
