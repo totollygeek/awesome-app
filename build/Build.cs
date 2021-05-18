@@ -10,10 +10,12 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
@@ -56,6 +58,7 @@ class Build : NukeBuild, IHaveGit
     AbsolutePath OutputDirectory => RootDirectory / "output";
     AbsolutePath TestResultDirectory => OutputDirectory / "test-results";
     AbsolutePath PackagesDirectory => OutputDirectory / "packages";
+    AbsolutePath Dockerfile => SourceDirectory / "awesome.app" / "Dockerfile";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -111,7 +114,8 @@ class Build : NukeBuild, IHaveGit
                         .EnableCollectCoverage()
                         .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
                         .SetExcludeByFile("*.Generated.cs")
-                        .SetCoverletOutputFormat($"\\\"{CoverletOutputFormat.cobertura},{CoverletOutputFormat.json}\\\"")
+                        .SetCoverletOutputFormat(
+                            $"\\\"{CoverletOutputFormat.cobertura},{CoverletOutputFormat.json}\\\"")
                         .EnableUseSourceLink())
                     .CombineWith(TestProjects, (_, p) => _
                             .SetProjectFile(p)
@@ -168,6 +172,13 @@ class Build : NukeBuild, IHaveGit
         .Executes(() =>
         {
             Logger.Info("");
+        });
+
+    Target BuildDockerImage => _ => _
+        .Executes(() =>
+        {
+            DockerBuild(_ => _
+                .SetFile(Dockerfile));
         });
 
     T From<T>()
