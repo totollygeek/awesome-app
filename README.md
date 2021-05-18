@@ -1,4 +1,5 @@
 # An Awesome App
+[![continuous](https://github.com/totollygeek/awesome-app/actions/workflows/continuous.yml/badge.svg?branch=main)](https://github.com/totollygeek/awesome-app/actions/workflows/continuous.yml)
 
 This is my **awesome** app, which is not doing much, aside from being awesome.
 
