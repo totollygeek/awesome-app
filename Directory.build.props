@@ -16,9 +16,6 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/totollygeek/awesome-app</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(IsPackable)' != 'False'">
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
