@@ -43,7 +43,7 @@ jobs:
           name: test-results
           path: output/test-results
       - uses: actions/upload-artifact@v1
-         with:
+        with:
           name: packages
           path: output/packages
   ubuntu-latest:

@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Description>Cross-platform build automation system</Description>
+        <Description>An awesome app for awesome stuff</Description>
         <Authors>Todor Todorov</Authors>
         <Copyright>Copyright $([System.DateTime]::Now.Year) Todor Todorov</Copyright>
         <PackageTags>demo nuke</PackageTags>
@@ -18,7 +18,7 @@
         <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('tests'))">
+    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.tests'))">
         <IsPackable>False</IsPackable>
     </PropertyGroup>
 
@@ -38,7 +38,7 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
-    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('tests'))">
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.tests'))">
         <PackageReference Include="coverlet.msbuild" Version="3.0.3" />
         <PackageReference Include="FluentAssertions" Version="5.10.3"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/>
