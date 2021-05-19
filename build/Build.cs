@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Components;
@@ -64,6 +65,13 @@ class Build : NukeBuild, IHaveGit
         .Before(Restore)
         .Executes(() =>
         {
+            Logger.Info($"{nameof(RootDirectory)}:\t {RootDirectory}");
+            Logger.Info($"{nameof(TestsDirectory)}:\t {TestsDirectory}");
+            Logger.Info($"{nameof(OutputDirectory)}: {OutputDirectory}");
+            Logger.Info($"{nameof(Dockerfile)}:\t {Dockerfile}");
+            
+            Console.WriteLine();
+            
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(OutputDirectory);
