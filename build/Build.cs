@@ -34,8 +34,9 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     AzurePipelinesImage.UbuntuLatest,
     AzurePipelinesImage.WindowsLatest,
     AzurePipelinesImage.MacOsLatest,
-    InvokedTargets = new[] { nameof(Test), nameof(PushPackages) },
-    NonEntryTargets = new[] { nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack) })]
+    InvokedTargets = new[] { nameof(PushPackages) },
+    NonEntryTargets = new[] { nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack), nameof(PushPackages) },
+    ImportSecrets = new[] { "NuGetApiKey" })]
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild, IHaveGit
