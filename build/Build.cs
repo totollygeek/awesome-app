@@ -65,10 +65,10 @@ class Build : NukeBuild, IHaveGit
         .Before(Restore)
         .Executes(() =>
         {
-            Logger.Info($"{nameof(RootDirectory)}:\t {RootDirectory}");
-            Logger.Info($"{nameof(TestsDirectory)}:\t {TestsDirectory}");
-            Logger.Info($"{nameof(OutputDirectory)}: {OutputDirectory}");
-            Logger.Info($"{nameof(Dockerfile)}:\t {Dockerfile}");
+            Serilog.Log.Information("{RootDirectoryName}:\t {RootDirectory}", nameof(RootDirectory), RootDirectory);
+            Serilog.Log.Information("{TestsDirectoryName}:\t {TestsDirectory}", nameof(TestsDirectory), TestsDirectory);
+            Serilog.Log.Information("{OutputDirectoryName}:\t {OutputDirectory}", nameof(OutputDirectory), OutputDirectory);
+            Serilog.Log.Information("{DockerfileName}:\t {Dockerfile}", nameof(Dockerfile), Dockerfile);
             
             Console.WriteLine();
             
@@ -127,7 +127,7 @@ class Build : NukeBuild, IHaveGit
                         .EnableUseSourceLink())
                     .CombineWith(TestProjects, (_, p) => _
                             .SetProjectFile(p)
-                            .SetLogger($"{logger};LogFileName={p.Name}.{logger}")),
+                            .AddLoggers($"{logger};LogFileName={p.Name}.{logger}")),
                     completeOnFailure: true);
             }
             finally
@@ -179,7 +179,7 @@ class Build : NukeBuild, IHaveGit
         .Requires(() => NuGetApiKey)
         .Executes(() =>
         {
-            Logger.Info("");
+            Serilog.Log.Information("Pushing packages here...");
         });
 
     Target BuildDockerImage => _ => _
