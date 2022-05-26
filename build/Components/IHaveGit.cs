@@ -1,7 +1,6 @@
 ﻿using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.Tools.GitVersion;
-using static Nuke.Common.ValueInjection.ValueInjectionUtility;
 
 namespace Components
 {
