@@ -4,6 +4,7 @@ using System.Linq;
 using Components;
 using Nuke.Common;
 using Nuke.Common.CI;
+using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
@@ -29,6 +30,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     PublishArtifacts = true,
     InvokedTargets = new[] { nameof(Test), nameof(PushPackages) },
     CacheKeyFiles = new[] { "global.json", "source/**/*.csproj" })]
+[AzurePipelines(
+    AzurePipelinesImage.UbuntuLatest,
+    AzurePipelinesImage.WindowsLatest,
+    AzurePipelinesImage.MacOsLatest,
+    InvokedTargets = new[] { nameof(Test), nameof(PushPackages) },
+    NonEntryTargets = new[] { nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack) })]
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild, IHaveGit
