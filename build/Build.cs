@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Components;
 using Nuke.Common;
@@ -140,9 +141,19 @@ class Build : NukeBuild, IHaveGit
             }
             finally
             {
+                ReportTestResults();
                 ReportTestCount();
             }
         });
+    
+    void ReportTestResults()
+    {
+        TestResultDirectory.GlobFiles("*.trx").ForEach(x =>
+            AzurePipelines.Instance?.PublishTestResults(
+                type: AzurePipelinesTestResultsType.VSTest,
+                title: $"{Path.GetFileNameWithoutExtension(x)} ({AzurePipelines.Instance.StageDisplayName})",
+                files: new string[] { x }));
+    }
 
     void ReportTestCount()
     {
