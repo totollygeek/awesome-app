@@ -26,6 +26,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.MacOsLatest,
+    FetchDepth = 0,
     OnPushBranches = new[] { MainBranch },
     ImportSecrets = new[] { "NuGetApiKey" },
     PublishArtifacts = true,
