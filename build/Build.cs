@@ -22,14 +22,15 @@ using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [GitHubActions(
-    "continuous",
-    GitHubActionsImage.WindowsLatest,
+    "gh-actions",
     GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.MacOsLatest,
     FetchDepth = 0,
     OnPushBranches = new[] { MainBranch },
-    ImportSecrets = new[] { "NuGetApiKey" },
+    ImportSecrets = new[] { nameof(NuGetApiKey) },
     PublishArtifacts = true,
+    EnableGitHubToken = true,
     InvokedTargets = new[] { nameof(Test), nameof(PushPackages) },
     CacheKeyFiles = new[] { "global.json", "source/**/*.csproj" })]
 [AzurePipelines(
@@ -38,7 +39,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     AzurePipelinesImage.MacOsLatest,
     InvokedTargets = new[] { nameof(PushPackages) },
     NonEntryTargets = new[] { nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack), nameof(PushPackages) },
-    ImportSecrets = new[] { "NuGetApiKey" })]
+    ImportSecrets = new[] { nameof(NuGetApiKey) })]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild, IHaveGit
 {
