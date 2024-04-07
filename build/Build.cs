@@ -24,6 +24,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.MacOsLatest,
     FetchDepth = 0,
+    Submodules = GitHubActionsSubmodules.Recursive,
     OnPushBranches = [MainBranch],
     ImportSecrets = [nameof(NuGetApiKey)],
     PublishArtifacts = true,
@@ -34,6 +35,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     AzurePipelinesImage.UbuntuLatest,
     AzurePipelinesImage.WindowsLatest,
     AzurePipelinesImage.MacOsLatest,
+    Submodules = true,
     InvokedTargets = [nameof(PushPackages)],
     NonEntryTargets = [nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack), nameof(PushPackages)],
     ImportSecrets = [nameof(NuGetApiKey)])]

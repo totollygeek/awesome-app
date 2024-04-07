@@ -10,12 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\external\Dumpify\src\Dumpify\Dumpify.csproj" />
         <ProjectReference Include="..\awesome.lib\awesome.lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-<!--        <PackageReference Include="Dumpify" Version="0.6.5" />-->
         <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.38" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.48.1-preview.0.38" />
         <PackageReference Include="Spectre.Console.ImageSharp" Version="0.48.1-preview.0.38" />
@@ -26,11 +26,4 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Dumpify">
-        <HintPath>..\..\..\Dumpify\src\Dumpify\bin\Debug\net8.0\Dumpify.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>
