@@ -2,19 +2,35 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>TOTOllyGeek.Awesome</RootNamespace> 
-        
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>TOTOllyGeek.Awesome</RootNamespace>
+
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>awesome</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\awesome.lib\awesome.lib.csproj" />
+        <ProjectReference Include="..\awesome.lib\awesome.lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+        <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+<!--        <PackageReference Include="Dumpify" Version="0.6.5" />-->
+        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.38" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.48.1-preview.0.38" />
+        <PackageReference Include="Spectre.Console.ImageSharp" Version="0.48.1-preview.0.38" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="..\..\images\why.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Dumpify">
+        <HintPath>..\..\..\Dumpify\src\Dumpify\bin\Debug\net8.0\Dumpify.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

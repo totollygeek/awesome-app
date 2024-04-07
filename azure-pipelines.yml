@@ -26,26 +26,28 @@ stages:
         dependsOn: [  ]
         steps:
           - task: Cache@2
-            displayName: Cache (nuke-temp)
+            displayName: 'Cache: nuke-temp'
             inputs:
-              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuke-temp
               path: .nuke/temp
           - task: Cache@2
-            displayName: Cache (nuget-packages)
+            displayName: 'Cache: nuget-packages'
             inputs:
-              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(HOME)/.nuget/packages
           - task: CmdLine@2
+            displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip'
             env:
               NuGetApiKey: $(NuGetApiKey)
           - task: PublishBuildArtifacts@1
+            displayName: 'Publish: test-results'
             inputs:
               artifactName: test-results
-              pathtoPublish: 'output/test-results'
+              pathToPublish: 'output/test-results'
   - stage: windows_latest
     displayName: 'windows-latest'
     dependsOn: [  ]
@@ -57,26 +59,28 @@ stages:
         dependsOn: [  ]
         steps:
           - task: Cache@2
-            displayName: Cache (nuke-temp)
+            displayName: 'Cache: nuke-temp'
             inputs:
-              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuke-temp
               path: .nuke/temp
           - task: Cache@2
-            displayName: Cache (nuget-packages)
+            displayName: 'Cache: nuget-packages'
             inputs:
-              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(USERPROFILE)/.nuget/packages
           - task: CmdLine@2
+            displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip'
             env:
               NuGetApiKey: $(NuGetApiKey)
           - task: PublishBuildArtifacts@1
+            displayName: 'Publish: test-results'
             inputs:
               artifactName: test-results
-              pathtoPublish: 'output/test-results'
+              pathToPublish: 'output/test-results'
   - stage: macOS_latest
     displayName: 'macOS-latest'
     dependsOn: [  ]
@@ -88,23 +92,25 @@ stages:
         dependsOn: [  ]
         steps:
           - task: Cache@2
-            displayName: Cache (nuke-temp)
+            displayName: 'Cache: nuke-temp'
             inputs:
-              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuke-temp | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuke-temp
               path: .nuke/temp
           - task: Cache@2
-            displayName: Cache (nuget-packages)
+            displayName: 'Cache: nuget-packages'
             inputs:
-              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj
+              key: $(Agent.OS) | nuget-packages | **/global.json, **/*.csproj, **/Directory.Packages.props
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(HOME)/.nuget/packages
           - task: CmdLine@2
+            displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip'
             env:
               NuGetApiKey: $(NuGetApiKey)
           - task: PublishBuildArtifacts@1
+            displayName: 'Publish: test-results'
             inputs:
               artifactName: test-results
-              pathtoPublish: 'output/test-results'
+              pathToPublish: 'output/test-results'

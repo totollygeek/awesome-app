@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>TOTOllyGeek.Awesome.Lib</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Figgle" Version="0.5.1" />
-      <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+        <PackageReference Include="Figgle" Version="0.5.1" />
+        <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

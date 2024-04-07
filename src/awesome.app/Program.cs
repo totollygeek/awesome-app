@@ -1,27 +1,17 @@
-﻿using System;
-using System.Linq;
-using TOTOllyGeek.Awesome.Lib;
+﻿using Spectre.Console.Cli;
+using TOTOllyGeek.Awesome.Dump;
+using TOTOllyGeek.Awesome.Figlet;
+using TOTOllyGeek.Awesome.Menu;
+using TOTOllyGeek.Awesome.Repl;
 
-namespace TOTOllyGeek.Awesome
-{
-    class Program
-    {
-        static int Main(string[] args)
-        {
-            if (args.Length == 0)
-            {
-                Console.WriteLine("You need to specify some text!");
-                return -1;
-            }
-
-            var figlets = args.Select(a => new FigMe(a).ToString());
+var app = new CommandApp();
             
-            foreach (var figlet in figlets)
-            {
-                Console.WriteLine(figlet);
-            }
+app.Configure(config =>
+{
+    config.AddCommand<MenuCommand>("menu");
+    config.AddCommand<FigletCommand>("figlet");
+    config.AddCommand<DumpPersonCommand>("dump");
+    config.AddCommand<ReplCommand>("repl");
+});
 
-            return 0;
-        }
-    }
-}
+return app.Run(args);

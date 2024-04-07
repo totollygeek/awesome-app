@@ -12,11 +12,13 @@
         <Description>An awesome app for awesome stuff</Description>
         <Authors>Todor Todorov</Authors>
         <Copyright>Copyright $([System.DateTime]::Now.Year) Todor Todorov</Copyright>
-        <PackageTags>demo nuke</PackageTags>
+        <PackageTags>awesome app</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/totollygeek/awesome-app</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <NoWarn>CS0649;CS0169;CS1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup Condition="">

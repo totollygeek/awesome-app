@@ -7,7 +7,6 @@ using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -17,29 +16,27 @@ using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-
 [GitHubActions(
     "gh-actions",
     GitHubActionsImage.UbuntuLatest,
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.MacOsLatest,
     FetchDepth = 0,
-    OnPushBranches = new[] { MainBranch },
-    ImportSecrets = new[] { nameof(NuGetApiKey) },
+    OnPushBranches = [MainBranch],
+    ImportSecrets = [nameof(NuGetApiKey)],
     PublishArtifacts = true,
     EnableGitHubToken = true,
-    InvokedTargets = new[] { nameof(Test), nameof(PushPackages) },
-    CacheKeyFiles = new[] { "global.json", "source/**/*.csproj" })]
+    InvokedTargets = [nameof(Test), nameof(PushPackages)],
+    CacheKeyFiles = ["global.json", "source/**/*.csproj"])]
 [AzurePipelines(
     AzurePipelinesImage.UbuntuLatest,
     AzurePipelinesImage.WindowsLatest,
     AzurePipelinesImage.MacOsLatest,
-    InvokedTargets = new[] { nameof(PushPackages) },
-    NonEntryTargets = new[] { nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack), nameof(PushPackages) },
-    ImportSecrets = new[] { nameof(NuGetApiKey) })]
+    InvokedTargets = [nameof(PushPackages)],
+    NonEntryTargets = [nameof(Clean), nameof(Restore), nameof(Compile), nameof(Pack), nameof(PushPackages)],
+    ImportSecrets = [nameof(NuGetApiKey)])]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild, IHaveGit
 {
@@ -50,15 +47,15 @@ class Build : NukeBuild, IHaveGit
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     const string MainBranch = "main";
-    
-    public static int Main () => Execute<Build>(
-        c => c.Clean, 
+
+    public static int Main() => Execute<Build>(
+        c => c.Clean,
         x => x.PushPackages);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-    
-    [Parameter] [Secret] string NuGetApiKey;
+
+    [Parameter][Secret] string NuGetApiKey;
 
     [Solution] readonly Solution Solution;
     GitVersion GitVersion => From<IHaveGit>().Versioning;
@@ -79,12 +76,12 @@ class Build : NukeBuild, IHaveGit
             Serilog.Log.Information("{TestsDirectoryName}:\t {TestsDirectory}", nameof(TestsDirectory), TestsDirectory);
             Serilog.Log.Information("{OutputDirectoryName}:\t {OutputDirectory}", nameof(OutputDirectory), OutputDirectory);
             Serilog.Log.Information("{DockerfileName}:\t {Dockerfile}", nameof(Dockerfile), Dockerfile);
-            
+
             Console.WriteLine();
-            
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(OutputDirectory);
+
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(dir => dir.DeleteDirectory());
+            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(dir => dir.DeleteDirectory());
+            OutputDirectory.CreateOrCleanDirectory();
         });
 
     Target Restore => _ => _
@@ -106,23 +103,23 @@ class Build : NukeBuild, IHaveGit
                 .SetInformationalVersion(GitVersion.InformationalVersion)
                 .EnableNoRestore());
         });
-    
+
     [Partition(2)] readonly Partition TestPartition;
-    IEnumerable<Project> TestProjects => TestPartition.GetCurrent(Solution.GetProjects("*.tests"));
+    IEnumerable<Project> TestProjects => TestPartition.GetCurrent(Solution.GetAllProjects("*.tests"));
 
     Target Test => _ => _
-        .DependsOn(Compile)  
+        .DependsOn(Compile)
         .Produces(TestResultDirectory / "*.trx")
         .Produces(TestResultDirectory / "*.xml")
         .Produces(TestResultDirectory / "*.html")
         .Executes(() =>
         {
-            EnsureExistingDirectory(TestResultDirectory);
-            
+            TestResultDirectory.CreateDirectory();
+
             try
             {
                 var logger = IsLocalBuild ? "html" : "trx";
-                
+
                 DotNetTest(_ => _
                         .SetConfiguration(Configuration)
                     .SetNoBuild(SucceededTargets.Contains(Compile))
@@ -146,7 +143,7 @@ class Build : NukeBuild, IHaveGit
                 ReportTestCount();
             }
         });
-    
+
     void ReportTestResults()
     {
         TestResultDirectory.GlobFiles("*.trx").ForEach(x =>
@@ -183,7 +180,7 @@ class Build : NukeBuild, IHaveGit
         .Produces(PackagesDirectory / "*.nupkg")
         .Executes(() =>
         {
-            EnsureExistingDirectory(PackagesDirectory);
+            PackagesDirectory.CreateDirectory();
 
             DotNetPack(_ => _
                 .SetProject(Solution)
@@ -206,10 +203,12 @@ class Build : NukeBuild, IHaveGit
         .Executes(() =>
         {
             DockerBuild(_ => _
-                .SetFile(Dockerfile));
+                .AddTag("awesome")
+                .SetFile(Dockerfile)
+                .SetPath(RootDirectory));
         });
 
     T From<T>()
         where T : INukeBuild
-        => (T) (object) this;
+        => (T)(object)this;
 }

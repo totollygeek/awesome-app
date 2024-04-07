@@ -16,6 +16,10 @@ ProjectSection(SolutionItems) = preProject
 	LICENSE = LICENSE
 	README.md = README.md
 	.gitattributes = .gitattributes
+	global.json = global.json
+	NuGet.config = NuGet.config
+	GitVersion.yml = GitVersion.yml
+	Directory.build.props = Directory.build.props
 EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{8E438553-F16C-4098-AD7A-D093B0DE7A48}"

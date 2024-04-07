@@ -21,7 +21,7 @@ namespace TOTOllyGeek.Awesome.Tests
                 @$" /_/   \_\_/\_/ \___||___/\___/|_| |_| |_|\___|{Environment.NewLine}" +
                 @$"                                               {Environment.NewLine}";
             
-            figle.Should().Be(expected);
+            figle.Should().NotBeNull().And.NotBeEmpty().And.Be(expected);
         }
         
         [TestMethod]
@@ -37,7 +37,7 @@ namespace TOTOllyGeek.Awesome.Tests
                 @$"  \__\___/ \__\___/|_|_|\__, |\__, |\___|\___|_|\_\{Environment.NewLine}" +
                 @$"                        |___/ |___/                {Environment.NewLine}";
             
-            figle.Should().Be(expected);
+            figle.Should().NotBeNull().And.NotBeEmpty().And.Be(expected);
         }
     }
 }
