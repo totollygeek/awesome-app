@@ -7,7 +7,7 @@ namespace TOTOllyGeek.Awesome.Figlet;
 
 internal class FigletExecutor(string? text = null, FiggleFont? font = null) : OperationExecutor
 {
-    public override string OperationName => "Figlet";
+    public override string OperationName => "Generate a Figlet";
 
     public override int Execute()
     {

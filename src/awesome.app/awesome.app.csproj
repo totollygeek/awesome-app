@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+        <PackageReference Include="NewsAPI" Version="0.7.0" />
         <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.38" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.48.1-preview.0.38" />
         <PackageReference Include="Spectre.Console.ImageSharp" Version="0.48.1-preview.0.38" />

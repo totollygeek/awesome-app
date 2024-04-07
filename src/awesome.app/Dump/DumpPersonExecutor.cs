@@ -11,7 +11,7 @@ internal class DumpPersonExecutor(
     bool? showPrivateMembers = null,
     bool? showSalary = null) : OperationExecutor
 {
-    public override string OperationName => "Dump Objects";
+    public override string OperationName => "Dump a Person";
     public override int Execute()
     {
         var dumpPerson = person ?? GeneratePerson();

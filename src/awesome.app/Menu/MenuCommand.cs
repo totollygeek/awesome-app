@@ -3,6 +3,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using TOTOllyGeek.Awesome.Dump;
 using TOTOllyGeek.Awesome.Figlet;
+using TOTOllyGeek.Awesome.News;
 using TOTOllyGeek.Awesome.Repl;
 
 namespace TOTOllyGeek.Awesome.Menu;
@@ -22,6 +23,7 @@ public class MenuCommand :  Command<MenuCommand.Settings>
                 .PageSize(10)
                 .AddChoices(
                     new FigletExecutor(),
+                    new NewsExecutor(),
                     new DumpPersonExecutor(),
                     new ReplExecutor(),
                     new ExitExecutor()));

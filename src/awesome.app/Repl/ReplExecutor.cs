@@ -7,7 +7,7 @@ internal class ReplExecutor() : OperationExecutor
 {
     private const string CSharpReplDotnetTool = "csharprepl";
     
-    public override string OperationName => "C# REPL";
+    public override string OperationName => "C# Run-Eval-Print Loop";
 
     public override int Execute()
     {
