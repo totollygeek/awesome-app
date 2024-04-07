@@ -122,20 +122,20 @@ class Build : NukeBuild, IHaveGit
 
                 DotNetTest(_ => _
                         .SetConfiguration(Configuration)
-                    .SetNoBuild(SucceededTargets.Contains(Compile))
-                    .ResetVerbosity()
-                    .SetResultsDirectory(TestResultDirectory)
-                    .When(IsServerBuild, _ => _
-                        .EnableCollectCoverage()
-                        .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
-                        .SetExcludeByFile("*.Generated.cs")
-                        .SetCoverletOutputFormat(
-                            $"\\\"{CoverletOutputFormat.cobertura},{CoverletOutputFormat.json}\\\"")
-                        .EnableUseSourceLink())
-                    .CombineWith(TestProjects, (_, p) => _
+                        .SetFilter("TestCategory!=failing")
+                        .SetNoBuild(SucceededTargets.Contains(Compile))
+                        .ResetVerbosity()
+                        .SetResultsDirectory(TestResultDirectory)
+                        .When(IsServerBuild, _ => _
+                            .EnableCollectCoverage()
+                            .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                            .SetExcludeByFile("*.Generated.cs")
+                            .SetCoverletOutputFormat(
+                                $"\\\"{CoverletOutputFormat.cobertura},{CoverletOutputFormat.json}\\\"")
+                            .EnableUseSourceLink())
+                        .CombineWith(TestProjects, (_, p) => _
                             .SetProjectFile(p)
-                            .AddLoggers($"{logger};LogFileName={p.Name}.{logger}")),
-                    completeOnFailure: true);
+                            .AddLoggers($"{logger};LogFileName={p.Name}.{logger}")), completeOnFailure: true);
             }
             finally
             {

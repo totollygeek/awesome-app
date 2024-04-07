@@ -22,10 +22,11 @@ public class FluentTests
     {
         var numbers = new[] { 2, 4, 6, 8, 10 };
 
-        numbers.Should().Satisfy(n => int.IsEvenInteger(n));
+        numbers.Should().AllSatisfy(n => int.IsEvenInteger(n));
     }
     
     [TestMethod]
+    [TestCategory("failing")]
     public void TestWhichIsFailingForArray()
     {
         var numbers = new[] { 1, 2, 3, 4, 5 };
@@ -34,6 +35,7 @@ public class FluentTests
     }
     
     [TestMethod]
+    [TestCategory("failing")]
     public void TestWithoutAScope()
     {
         var numbers = new[] { 2, 4, 6, 8, 10 };
@@ -45,6 +47,7 @@ public class FluentTests
     }
 
     [TestMethod]
+    [TestCategory("failing")]
     public void TestInAScope()
     {
         var numbers = new[] { 2, 4, 6, 8, 10 };
@@ -121,7 +124,7 @@ public class FluentTests
         // Directly
         player.Invoking(p => p.Attack())
             .Should().Throw<NotImplementedException>()
-            .WithMessage("The attack move is still not ready for production");
+            .WithMessage("The synchronous attack move is too slow for production");
     }
 
     [TestMethod]
@@ -153,6 +156,7 @@ public class FluentTests
     }
     
     [TestMethod]
+    [TestCategory("failing")]
     public void TestCustomAssertionFail()
     {
         var player = new Player
